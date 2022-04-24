@@ -34,7 +34,7 @@ rule aggregate:
                                   category="{}_dea_seurat".format(config["project_name"]), 
                                   subcategory="{analysis}"),
         dea_filtered_stats = report(os.path.join(result_path,'{analysis}','DEA_FILTERED_stats.csv'), 
-                                  caption="../report/dea_stats", 
+                                  caption="../report/dea_stats.rst", 
                                   category="{}_dea_seurat".format(config["project_name"]), 
                                   subcategory="{analysis}"),
         dea_filtered_lfc = os.path.join(result_path,'{analysis}','DEA_FILTERED_LFC.csv'),
