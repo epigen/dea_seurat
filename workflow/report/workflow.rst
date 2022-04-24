@@ -1,0 +1,1 @@
+A `Snakemake workflow for performing differential expression analyses (DEA) <https://github.com/epigen/dea_seurat>`_ on (multimodal) sc/snRNA-seq data powered by the R package `Seurat <https://satijalab.org/seurat/index.html>`_.

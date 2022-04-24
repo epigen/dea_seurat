@@ -1,0 +1,1 @@
+Clustered heatmap visualizing log fold changes of the filtered DEA results of analysis {{snakemake.wildcards["analysis"]}} using assay {{snakemake.params["assay"]}} to compare groups in {{snakemake.params["metadata"]}} versus {{snakemake.params["control"]}}.
