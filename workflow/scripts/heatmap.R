@@ -50,9 +50,8 @@ lfc_heatmap <- as.ggplot(pheatmap(dea_lfc,
 
 
 # save plot
-options(repr.plot.width=width_panel, repr.plot.height=height)
-print(lfc_heatmap)
-
+# options(repr.plot.width=width_panel, repr.plot.height=height)
+# print(lfc_heatmap)
 
 ggsave_new(filename = "DEA_LFC_heatmap", 
            results_path=dirname(dea_lfc_heatmap_path), 

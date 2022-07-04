@@ -31,6 +31,15 @@ DefaultAssay(object = data) <- assay
 Idents(object = data) <- metadata
 
 
+### save list of all expressed features for downstream analysis (eg as background in enrichment analyses)
+features_path <- file.path(result_dir,"feature_lists")
+if (!dir.exists(features_path)){
+    dir.create(features_path, recursive = TRUE)
+}
+all_features <- rownames(GetAssayData(object = data, assay = assay, slot = "data"))
+write(all_features, file.path(features_path, "ALL_features.txt"))
+
+
 ### perform DEA
 
 # one vs all DEA to identify group specific markers compared to rest
