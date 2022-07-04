@@ -37,7 +37,11 @@ This is a template for the Methods section of a scientific publication and is in
 
 The outlined analyses were performed using the R package Seurat (ver) [ref] unless stated otherwise.
 
---- COMING SOON ---
+**Differential Expression Analysis (DEA).** DEA was performed on the assay [X] and data slot [X] with Seurat's FindMarkers/FindAllMarkers function using the statistical test [X] with the parameters log2(fold change) threshold of [X] and minimal percentage of expression [X]. The results were filtered for relevant features by adjusted p-value of [X], absolute log2(fold change) of [X] and minimum percentage of expression [X].
+
+**Visualization.** All and filtered result statistics, i.e., number of statistically significant results split by positive (up) and negative (down) effect-sizes, were separately visualized with stacked bar plots using ggplot (ver) [ref]. 
+To visually summarize results of the same analysis the filtered log2(fold change) values of features that were found to be at least in one comparison statistically significantly differentially expressed were visualized in a hierarchically clustered heatmap using pheatmap (ver) [ref]. 
+Volcano plots were generated for each analysis using EnhancedVolcano (ver) [ref] with adjusted p-value threshold of [X] and log2(fold change) threshold of [X] as visual cut-offs for the y- and x-axis, respectively.
 
 **The analysis and visualizations described here were performed using a publicly available Snakemake [ver] (ref) workflow [ref - cite this workflow here].**
 
