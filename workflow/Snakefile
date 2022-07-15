@@ -1,3 +1,4 @@
+
 ##### libraries #####
 import os
 import sys
@@ -22,7 +23,7 @@ configfile: os.path.join("config", "config.yaml")
 # load annotation
 annot = pd.read_csv(config['annotation'], index_col='name')
 analyses = list(annot.index)
-# convert dictionry for parametrization of rules
+# convert dictionary for parametrization of rules
 annot_dict = annot.to_dict('index')
 
 result_path = os.path.join(config["result_path"],'dea_seurat')

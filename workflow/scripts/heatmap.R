@@ -45,7 +45,8 @@ lfc_heatmap <- as.ggplot(pheatmap(dea_lfc,
                annotation_col = annot,
                breaks=seq(-max(abs(dea_lfc)), max(abs(dea_lfc)), length.out=200),
                color=colorRampPalette(c("blue", "white", "red"))(200),
-                                     annotation_names_col = F
+                                     annotation_names_col = F,
+                                  silent = TRUE
               ))
 
 
