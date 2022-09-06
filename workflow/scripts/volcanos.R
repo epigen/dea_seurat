@@ -31,6 +31,9 @@ width_panel <- n_col * width
 ### load DEA results
 dea_results <- read.csv(file=file.path(dea_result_path))
 
+# convert group column to string for correct plotting
+dea_results$group <- as.character(dea_results$group)
+
 height_panel <- height * ceiling(length(unique(dea_results$group))/n_col)
 
 ### Visualize DEA results using Volcano plots
@@ -44,6 +47,9 @@ for (group in unique(dea_results$group)){
     lab <- toptable$feature
     x <- "avg_log2FC"
     y <- "p_val_adj"
+    
+    # set adjusted p-values of 0 to minimum in analysis
+    toptable[toptable$p_val_adj==0, "p_val_adj"] <- min(toptable$p_val_adj[toptable$p_val_adj!=0])
 
     volcano_plots[[group]] <- EnhancedVolcano(toptable = toptable,
                     lab = lab,

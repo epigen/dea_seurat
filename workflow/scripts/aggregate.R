@@ -36,14 +36,13 @@ if (!dir.exists(results_path)){
 ### load DEA results
 dea_results <- read.csv(file=file.path(dea_result_path))
 
-# subset for statistical significant results
-dea_results <- dea_results[dea_results$p_val_adj<=0.05, ]
 
 # annotate differential direction (up or down)
 dea_results$direction <- as.character(lapply(dea_results$avg_log2FC, function(x) if(x>0){"up"}else{"down"}))
 
-### aggregate & save DEA statistics
-dea_stats <- table(dea_results$group, dea_results$direction)
+### aggregate & save DEA statistics by stat. sign.
+tmp_dea_results <- dea_results[dea_results$p_val_adj<=adj_pval, ]
+dea_stats <- table(tmp_dea_results$group, tmp_dea_results$direction)
 dea_stats_df <- as.data.frame.matrix(dea_stats)
 dea_stats_df$total <- rowSums(dea_stats_df)
 
@@ -64,9 +63,10 @@ write.csv(dea_filtered_stats_df, file=file.path(dea_filtered_stats_path), row.na
 groups <- paste0("group_",unique(dea_filtered_results$group))
 features <- unique(dea_filtered_results$feature)
                                              
-lfc_df = data.frame(matrix(nrow=length(features), ncol=length(groups), dimnames=list(features, groups)))
+lfc_df <- data.frame(matrix(nrow=length(features), ncol=length(groups), dimnames=list(features, groups)))
+
 for (group in unique(dea_filtered_results$group)){
-    tmp_dea_results <- dea_filtered_results[dea_filtered_results$group==group, ]
+    tmp_dea_results <- dea_results[dea_results$group==group, ] #old: dea_filtered_results[dea_filtered_results$group==group, ]
     rownames(tmp_dea_results) <- tmp_dea_results$feature
     lfc_df[features, paste0("group_",group)] <- tmp_dea_results[features, 'avg_log2FC']
 }
@@ -85,14 +85,18 @@ for (group in unique(dea_filtered_results$group)){
 ### visualize & save ALL DEA statistics
 width_panel <- length(groups) * width + 1
                                              
-dea_results_p <- ggplot(dea_results, aes(x=group, fill=direction)) + 
+# convert group column to string for correct plotting
+dea_results$group <- as.character(dea_results$group)
+tmp_dea_results <- dea_results[dea_results$p_val_adj<=adj_pval, ]
+
+dea_results_p <- ggplot(tmp_dea_results, aes(x=group, fill=direction)) + 
                                              geom_bar() + 
                                              xlab(metadata) +
                                              ylab("number of differential features") +
                                              scale_y_continuous(limits = c(0, NA), expand = c(0, 0)) +
                                              scale_fill_manual(values=list(up="red", down="blue"), drop=FALSE) +
                                              custom_theme +
-                                             theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust=1)) # rotates the x-Axis
+                                             theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust=1, size = 6)) # rotates the x-Axis
                                              
                                              
 # save plot
@@ -104,7 +108,11 @@ ggsave_new(filename = "DEA_ALL_stats",
            width=width_panel, 
            height=height)      
                                              
-### visualize & save FILTERED DEA statistics                                             
+### visualize & save FILTERED DEA statistics
+                                             
+# convert group column to string for correct plotting
+dea_filtered_results$group <- as.character(dea_filtered_results$group)
+                                             
 dea_filtered_results_p <- ggplot(dea_filtered_results, aes(x=group, fill=direction)) + 
                                              geom_bar() + 
                                              xlab(metadata) +
@@ -112,7 +120,7 @@ dea_filtered_results_p <- ggplot(dea_filtered_results, aes(x=group, fill=directi
                                              scale_y_continuous(limits = c(0, NA), expand = c(0, 0)) +
                                              scale_fill_manual(values=list(up="red", down="blue"), drop=FALSE) +
                                              custom_theme +
-                                             theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust=1)) # rotates the x-Axis
+                                             theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust=1, size = 6)) # rotates the x-Axis
                                              
                                              
 # save plot

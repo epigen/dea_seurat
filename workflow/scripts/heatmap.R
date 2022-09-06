@@ -39,14 +39,16 @@ rownames(annot) <- colnames(dea_lfc)
 # make heatmap
 lfc_heatmap <- as.ggplot(pheatmap(dea_lfc, 
                show_rownames=F, 
-               show_colnames=F,
+               show_colnames=T,
+                fontsize = 5,
+                angle_col = 45,
                treeheight_row = 25,
                treeheight_col = 10,
-               annotation_col = annot,
+#                annotation_col = annot,
                breaks=seq(-max(abs(dea_lfc)), max(abs(dea_lfc)), length.out=200),
                color=colorRampPalette(c("blue", "white", "red"))(200),
-                                     annotation_names_col = F,
-                                  silent = TRUE
+               annotation_names_col = F,
+               silent = TRUE
               ))
 
 
