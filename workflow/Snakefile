@@ -44,7 +44,7 @@ rule all:
                               ),
         envs = expand(os.path.join(config["result_path"],'envs','dea_seurat','{env}.yaml'),env=['seurat','volcanos','ggplot','heatmap']),
         configs = os.path.join(config["result_path"],'configs','dea_seurat','{}_config.yaml'.format(config["project_name"])),
-        annotations = config["annotation"],
+        annotations = os.path.join(config["result_path"],'configs','dea_seurat','{}_annot.csv'.format(config["project_name"])),
     resources:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)

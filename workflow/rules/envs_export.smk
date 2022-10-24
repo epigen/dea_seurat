@@ -38,19 +38,25 @@ rule config_export:
     run:
         with open(output["configs"], 'w') as outfile:
             yaml.dump(config, outfile)
-
-# export used annotation file for documentation and reproducibility            
+        
+# export used annotation file for documentation and reproducibility         
 rule annot_export:
+    input:
+        config["annotation"],
     output:
-        annot = report(config["annotation"], 
+        annot = report(os.path.join(config["result_path"],'configs','dea_seurat','{}_annot.csv'.format(config["project_name"])), 
                          caption="../report/configs.rst", 
                          category="Configuration", 
                          subcategory="{}_dea_seurat".format(config["project_name"])
                         )
     resources:
-        mem_mb=config.get("mem_small", "16000"),
+        mem_mb=1000, #config.get("mem_small", "16000"),
     threads: config.get("threads", 1)
     log:
         os.path.join("logs","rules","annot_export.log"),
     params:
         partition=config.get("partition"),
+    shell:
+        """
+        cp {input} {output}
+        """
