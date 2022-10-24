@@ -2,7 +2,8 @@
 library(ggplot2)
 
 # source utility functions
-source("workflow/scripts/utils.R")
+# source("workflow/scripts/utils.R")
+snakemake@source("./utils.R")
 
 # inputs
 dea_result_path <- snakemake@input[["dea_results"]] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/dea_seurat/KOcall_NonTargeting_condition/DEA_results.csv"
