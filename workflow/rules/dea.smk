@@ -61,6 +61,7 @@ rule aggregate:
         adj_pval = config["filters"]["adj_pval"],
         lfc = config["filters"]["lfc"],
         min_pct = config["filters"]["min_pct"],
+        score_formula = config["score_formula"],
     script:
         "../scripts/aggregate.R"
 

@@ -7,9 +7,9 @@ threads: 2
 partition: 'shortq'
 
 ##### GENERAL #####
-annotation: /research/home/sreichl/projects/macroIC/config/AKsmall_dea_seurat_annotation.csv
-result_path: /nobackup/lab_bock/projects/macroIC/results/AKsmall/
-project_name: AKsmall
+annotation: /path/to/MyData_dea_seurat_annotation.csv
+result_path: /path/to/result/directory/
+project_name: MyData
 
 ##### DEA #####
 
@@ -22,6 +22,14 @@ min_pct: 0.1
 return_thresh: 1
 
 ##### AGGREGATION #####
+# score_formula is used to calculate a score for each gene and comparison (group) that can be used downstream e.g., for preranked GSEA
+# eval based score calculation -> eval(parse(text=" "))
+# DEA result dataframe is called: dea_results
+# available numerical columns: p_val, avg_log2FC, pct.1, pct.2, p_val_adj
+# common/popular example: "-log10(dea_results$p_val)*sign(dea_results$logFC)"
+# if not used leave empty: ""
+score_formula: "-log10(dea_results$p_val)*sign(dea_results$avg_log2FC)"
+
 # filters are applied to the DEA results and used for all outputs
 filters:
     adj_pval: 0.05

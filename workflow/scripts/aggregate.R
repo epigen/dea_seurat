@@ -6,14 +6,14 @@ library(ggplot2)
 snakemake@source("./utils.R")
 
 # inputs
-dea_result_path <- snakemake@input[["dea_results"]] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/dea_seurat/KOcall_NonTargeting_condition/DEA_results.csv"
+dea_result_path <- snakemake@input[["dea_results"]]
 
 # outputs
-dea_all_stats_path <- snakemake@output[["dea_all_stats"]] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/dea_seurat/KOcall_NonTargeting_condition/DEA_ALL_stats.csv"
-dea_filtered_stats_path <- snakemake@output[["dea_filtered_stats"]] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/dea_seurat/KOcall_NonTargeting_condition/DEA_FILTERED_stats.csv"
-dea_filtered_lfc_path <- snakemake@output[["dea_filtered_lfc"]] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/dea_seurat/KOcall_NonTargeting_condition/DEA_FILTERED_LFC.csv"
-dea_all_stats_plot_path <- snakemake@output[["dea_all_stats_plot"]] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/dea_seurat/KOcall_NonTargeting_condition/plots/DEA_ALL_stats.png"
-dea_filtered_stats_plot_path <- snakemake@output[["dea_filtered_stats_plot"]] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/dea_seurat/KOcall_NonTargeting_condition/plots/DEA_FILTERED_stats.png"
+dea_all_stats_path <- snakemake@output[["dea_all_stats"]]
+dea_filtered_stats_path <- snakemake@output[["dea_filtered_stats"]]
+dea_filtered_lfc_path <- snakemake@output[["dea_filtered_lfc"]]
+dea_all_stats_plot_path <- snakemake@output[["dea_all_stats_plot"]]
+dea_filtered_stats_plot_path <- snakemake@output[["dea_filtered_stats_plot"]]
 
 # parameters
 assay <- snakemake@params[["assay"]] #"SCT" #"RNA"
@@ -23,6 +23,7 @@ control <- snakemake@params[["control"]] #"untreated"
 adj_pval <- snakemake@params[["adj_pval"]] # 0.05
 lfc <- snakemake@params[["lfc"]] # 0.1
 min_pct <- snakemake@params[["min_pct"]] # 0.1
+score_formula <- snakemake@params[["score_formula"]] # "-log10(dea_results$p_val)*sign(dea_results$avg_log2FC)"
 
 # plot specifications
 width <- 0.5
@@ -36,13 +37,23 @@ if (!dir.exists(results_path)){
 
 ### load DEA results
 dea_results <- read.csv(file=file.path(dea_result_path))
+groups <- unique(dea_results$group)
 
+# determine and save feature scores for each gene and group for downstream analysis e.g., preranked GSEA
+if (score_formula!=""){
+    dea_results$score <- eval(parse(text=score_formula))
+    
+    for (group in groups){
+        tmp_features <- dea_results[(dea_results$group==group),c("feature","score")]
+        write.csv(tmp_features, file.path(results_path,paste0(group,"_featureScores.csv")), row.names=FALSE)
+    }
+}
 
 # annotate differential direction (up or down)
 dea_results$direction <- as.character(lapply(dea_results$avg_log2FC, function(x) if(x>0){"up"}else{"down"}))
 
 ### aggregate & save DEA statistics by stat. sign.
-tmp_dea_results <- dea_results[dea_results$p_val_adj<=adj_pval, ]
+tmp_dea_results <- dea_results[dea_results$p_val_adj <= adj_pval, ]
 dea_stats <- table(tmp_dea_results$group, tmp_dea_results$direction)
 dea_stats_df <- as.data.frame.matrix(dea_stats)
 dea_stats_df$total <- rowSums(dea_stats_df)
@@ -74,7 +85,7 @@ for (group in unique(dea_filtered_results$group)){
 
 write.csv(lfc_df, file=file.path(dea_filtered_lfc_path), row.names=TRUE)
 
-### save differential feature lists from filtered DEA results for downstream analysis                                             
+### save differential feature lists from filtered DEA results for downstream analysis (eg enrichment analysis)         
 for (group in unique(dea_filtered_results$group)){
     for (direction in unique(dea_filtered_results$direction)){
         
