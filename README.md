@@ -50,6 +50,7 @@ The workflow perfroms the following steps.
 - Differential Expression Analysis (DEA)
   - using Seurat's [FindMarkers](https://satijalab.org/seurat/reference/findmarkers) or [FindAllMarkers](https://satijalab.org/seurat/reference/findallmarkers) depending on the configuration (CSV)
   - feature list per comparison group and direction (up/down) for downstream analysis (eg enrichment analysis) (TXT)
+  - (optional) feature score tables (with two columns: "feature" and "score") per comparison group using {score_formula} for downstream analyses (eg preranked enrichment analysis) (CSV).
 - DEA result statistics: number of statistically significant results split by positive (up) and negative (down) change (CSV)
 - DEA result filtering by 
   - statistical significance (adjusted p-value)
