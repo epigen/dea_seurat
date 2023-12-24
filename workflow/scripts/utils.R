@@ -7,6 +7,10 @@ ggsave_new <- function(filename, results_path, plot, width=5, height=5){
         dir.create(results_path, recursive = TRUE)
     }
     
+    # failsafe for large plots
+    width <- min(100, width)
+    height <- min(100, height)
+    
     for (format in c('png')){
         ggsave(
           paste0(filename,'.',format),

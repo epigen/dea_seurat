@@ -3,6 +3,8 @@ library(EnhancedVolcano, quietly=TRUE)
 library(patchwork, quietly=TRUE)
 library(ggplot2)
 
+options(ragg.max_dim = 100000) # required for large volcano panels
+
 # source utility functions
 # source("workflow/scripts/utils.R")
 snakemake@source("./utils.R")
