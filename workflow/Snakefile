@@ -6,13 +6,10 @@ import pandas as pd
 import yaml
 from snakemake.utils import min_version
 
-min_version("6.0.3")
+min_version("7.15.2")
 
-SDIR = os.path.realpath(os.path.dirname(srcdir("Snakefile")))
-shell.prefix(f"set -eo pipefail;")
-
-##### container image #####
-# containerized: "docker://sreichl/..."
+##### module name #####
+module_name = "dea_seurat"
 
 ##### setup report #####
 report: os.path.join("report", "workflow.rst")
@@ -42,9 +39,9 @@ rule all:
         dea_lfc_heatmap = expand(os.path.join(result_path,'{analysis}','plots','DEA_LFC_heatmap.png'),
                                analysis = analyses,
                               ),
-        envs = expand(os.path.join(config["result_path"],'envs','dea_seurat','{env}.yaml'),env=['seurat','volcanos','ggplot','heatmap']),
-        configs = os.path.join(config["result_path"],'configs','dea_seurat','{}_config.yaml'.format(config["project_name"])),
-        annotations = os.path.join(config["result_path"],'configs','dea_seurat','{}_annot.csv'.format(config["project_name"])),
+        envs = expand(os.path.join(config["result_path"],'envs',module_name,'{env}.yaml'),env=['seurat','volcanos','ggplot','heatmap']),
+        configs = os.path.join(config["result_path"],'configs',module_name,'{}_config.yaml'.format(config["project_name"])),
+        annotations = os.path.join(config["result_path"],'configs',module_name,'{}_annot.csv'.format(config["project_name"])),
     resources:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)

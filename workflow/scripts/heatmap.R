@@ -1,8 +1,8 @@
 #### load libraries & utility function 
-library(pheatmap)
-library(patchwork)
-library(ggplot2)
-library(ggplotify)
+library("pheatmap")
+library("patchwork")
+library("ggplot2")
+library("ggplotify")
 
 # source utility functions
 # source("workflow/scripts/utils.R")
@@ -38,20 +38,21 @@ annot <- data.frame(group=gsub("group_","",colnames(dea_lfc)))
 rownames(annot) <- colnames(dea_lfc)
 
 # make heatmap
-lfc_heatmap <- as.ggplot(pheatmap(dea_lfc, 
-               show_rownames=F, 
-               show_colnames=T,
-                fontsize = 5,
-                angle_col = 45,
-               treeheight_row = 25,
-               treeheight_col = 10,
-#                annotation_col = annot,
-               breaks=seq(-max(abs(dea_lfc)), max(abs(dea_lfc)), length.out=200),
-               color=colorRampPalette(c("blue", "white", "red"))(200),
-               annotation_names_col = F,
-               silent = TRUE
-              ))
-
+lfc_heatmap <- as.ggplot(pheatmap(dea_lfc,
+                                  show_rownames=F,
+                                  show_colnames=T,
+                                  cluster_cols = ncol(dea_lfc) > 1,
+                                  fontsize = 5,
+                                  angle_col = 45,
+                                  treeheight_row = 25,
+                                  treeheight_col = 10,
+#                                   annotation_col = annot,
+                                  breaks=seq(-max(abs(dea_lfc)), max(abs(dea_lfc)), length.out=200),
+                                  color=colorRampPalette(c("blue", "white", "red"))(200),
+                                  annotation_names_col = F,
+                                  silent = TRUE
+                                 )
+                        )
 
 # save plot
 # options(repr.plot.width=width_panel, repr.plot.height=height)
