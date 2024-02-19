@@ -16,14 +16,14 @@ dea_all_stats_plot_path <- snakemake@output[["dea_all_stats_plot"]]
 dea_filtered_stats_plot_path <- snakemake@output[["dea_filtered_stats_plot"]]
 
 # parameters
-assay <- snakemake@params[["assay"]] #"SCT" #"RNA"
-metadata <- snakemake@params[["metadata"]] #"condition"
-control <- snakemake@params[["control"]] #"untreated"
+assay <- snakemake@params[["assay"]]
+metadata <- snakemake@params[["metadata"]]
+control <- snakemake@params[["control"]]
 
-adj_pval <- snakemake@params[["adj_pval"]] # 0.05
-lfc <- snakemake@params[["lfc"]] # 0.1
-min_pct <- snakemake@params[["min_pct"]] # 0.1
-score_formula <- snakemake@params[["score_formula"]] # "-log10(dea_results$p_val)*sign(dea_results$avg_log2FC)"
+adj_pval <- snakemake@params[["adj_pval"]]
+lfc <- snakemake@params[["lfc"]]
+min_pct <- snakemake@params[["min_pct"]]
+score_formula <- snakemake@params[["score_formula"]]
 
 # plot specifications
 width <- 0.5
@@ -36,7 +36,8 @@ if (!dir.exists(results_path)){
 }
 
 ### load DEA results
-dea_results <- read.csv(file=file.path(dea_result_path))
+# dea_results <- read.csv(file=file.path(dea_result_path))
+dea_results <- data.frame(fread(file.path(dea_result_path), header=TRUE))
 groups <- unique(dea_results$group)
 
 # determine and save feature scores for each gene and group for downstream analysis e.g., preranked GSEA
@@ -45,7 +46,8 @@ if (score_formula!=""){
     
     for (group in groups){
         tmp_features <- dea_results[(dea_results$group==group),c("feature","score")]
-        write.csv(tmp_features, file.path(results_path,paste0(group,"_featureScores.csv")), row.names=FALSE)
+#         write.csv(tmp_features, file.path(results_path,paste0(group,"_featureScores.csv")), row.names=FALSE)
+        fwrite(as.data.frame(tmp_features), file=file.path(results_path,paste0(group,"_featureScores.csv")), row.names=FALSE)
     }
 }
 
@@ -58,7 +60,8 @@ dea_stats <- table(tmp_dea_results$group, tmp_dea_results$direction)
 dea_stats_df <- as.data.frame.matrix(dea_stats)
 dea_stats_df$total <- rowSums(dea_stats_df)
 
-write.csv(dea_stats_df, file=file.path(dea_all_stats_path), row.names=TRUE)
+# write.csv(dea_stats_df, file=file.path(dea_all_stats_path), row.names=TRUE)
+fwrite(as.data.frame(dea_stats_df), file=file.path(dea_all_stats_path), row.names=TRUE)
 
 ### aggregate & save FILTERED DEA statistics
 dea_filtered_results <- dea_results[(dea_results$p_val_adj<=adj_pval) & 
@@ -69,7 +72,8 @@ dea_filtered_stats <- table(dea_filtered_results$group, dea_filtered_results$dir
 dea_filtered_stats_df <- as.data.frame.matrix(dea_filtered_stats)
 dea_filtered_stats_df$total <- rowSums(dea_filtered_stats_df)
                                              
-write.csv(dea_filtered_stats_df, file=file.path(dea_filtered_stats_path), row.names=TRUE)
+# write.csv(dea_filtered_stats_df, file=file.path(dea_filtered_stats_path), row.names=TRUE)
+fwrite(as.data.frame(dea_filtered_stats_df), file=file.path(dea_filtered_stats_path), row.names=TRUE)
 
 ### aggregate & save LFC matrix from filtered DEA results
 groups <- paste0("group_",unique(dea_filtered_results$group))
@@ -83,7 +87,8 @@ for (group in unique(dea_filtered_results$group)){
     lfc_df[features, paste0("group_",group)] <- tmp_dea_results[features, 'avg_log2FC']
 }
 
-write.csv(lfc_df, file=file.path(dea_filtered_lfc_path), row.names=TRUE)
+# write.csv(lfc_df, file=file.path(dea_filtered_lfc_path), row.names=TRUE)
+fwrite(as.data.frame(lfc_df), file=file.path(dea_filtered_lfc_path), row.names=TRUE)
 
 ### save differential feature lists from filtered DEA results for downstream analysis (eg enrichment analysis)         
 for (group in unique(dea_filtered_results$group)){

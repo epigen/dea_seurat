@@ -9,15 +9,15 @@ library("ggplotify")
 snakemake@source("./utils.R")
 
 # inputs
-dea_filtered_lfc_path <- snakemake@input[["dea_filtered_lfc"]] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/dea_seurat/KOcall_NonTargeting_condition/DEA_FILTERED_LFC.csv"
+dea_filtered_lfc_path <- snakemake@input[["dea_filtered_lfc"]]
 
 # outputs
-dea_lfc_heatmap_path <- snakemake@output[["dea_lfc_heatmap"]] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/dea_seurat/KOcall_NonTargeting_condition/plots/DEA_LFC_heatmap.png"
+dea_lfc_heatmap_path <- snakemake@output[["dea_lfc_heatmap"]]
 
 # parameters
-assay <- snakemake@params[["assay"]] #"SCT" #"RNA"
-metadata <- snakemake@params[["metadata"]] #"condition"
-control <- snakemake@params[["control"]] #"untreated"
+assay <- snakemake@params[["assay"]]
+metadata <- snakemake@params[["metadata"]]
+control <- snakemake@params[["control"]]
 
 
 # plot specifications
@@ -26,7 +26,8 @@ height <- 5
 
 
 ### load LFC DEA results
-dea_lfc <- read.csv(file=file.path(dea_filtered_lfc_path), row.names = 1)
+# dea_lfc <- read.csv(file=file.path(dea_filtered_lfc_path), row.names = 1)
+dea_lfc <- data.frame(fread(file.path(dea_filtered_lfc_path), header=TRUE), row.names=1)
 
 # set NA values to 0 (NA because below LFC threshold during testing or filtering)
 dea_lfc[is.na(dea_lfc)] <- 0

@@ -1,4 +1,5 @@
 ### Utility Functions
+library("data.table")
 
 # extended ggsave
 ggsave_new <- function(filename, results_path, plot, width=5, height=5){

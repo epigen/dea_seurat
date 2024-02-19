@@ -2,24 +2,24 @@
 library(Seurat)
 
 # inputs
-object_path <- snakemake@input[[1]] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/scrnaseq_processing_seurat/KOcall_NonTargeting/NORMALIZED_object.rds"
+object_path <- snakemake@input[[1]]
 
 # outputs
-dea_result_path <- snakemake@output[["dea_results"]] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/dea_seurat/KOcall_NonTargeting_condition/DEA_results.csv" 
+dea_result_path <- snakemake@output[["dea_results"]]
 
 # parameters
-assay <- snakemake@params[["assay"]] #"SCT" #"RNA"
-metadata <- snakemake@params[["metadata"]] #"condition"
-control <- snakemake@params[["control"]] #"untreated"
+assay <- snakemake@params[["assay"]]
+metadata <- snakemake@params[["metadata"]]
+control <- snakemake@params[["control"]]
 
-logfc_threshold <- snakemake@params[["logfc_threshold"]] #0.1
-test_use <- snakemake@params[["test_use"]] #"wilcox"
-min_pct <- snakemake@params[["min_pct"]] #0.1
+logfc_threshold <- snakemake@params[["logfc_threshold"]]
+test_use <- snakemake@params[["test_use"]]
+min_pct <- snakemake@params[["min_pct"]]
 
-return_thresh <- snakemake@params[["return_thresh"]] #1
-
+return_thresh <- snakemake@params[["return_thresh"]]
 
 result_dir <- dirname(dea_result_path)
+
 # make directories if not exist
 if (!dir.exists(result_dir)){
         dir.create(result_dir, recursive = TRUE)
@@ -131,4 +131,5 @@ if (control=="ALL"){
 }
 
 ### save results
-write.csv(dea_results, file=file.path(dea_result_path), row.names=FALSE)
+# write.csv(dea_results, file=file.path(dea_result_path), row.names=FALSE)
+fwrite(as.data.frame(dea_results), file=file.path(dea_result_path), row.names=FALSE)

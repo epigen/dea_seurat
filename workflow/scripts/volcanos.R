@@ -1,7 +1,7 @@
 #### load libraries & utility function 
-library(EnhancedVolcano, quietly=TRUE)
-library(patchwork, quietly=TRUE)
-library(ggplot2)
+library("EnhancedVolcano", quietly=TRUE)
+library("patchwork", quietly=TRUE)
+library("ggplot2")
 
 options(ragg.max_dim = 100000) # required for large volcano panels
 
@@ -10,15 +10,15 @@ options(ragg.max_dim = 100000) # required for large volcano panels
 snakemake@source("./utils.R")
 
 # inputs
-dea_result_path <- snakemake@input[["dea_results"]] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/dea_seurat/KOcall_NonTargeting_condition/DEA_results.csv"
+dea_result_path <- snakemake@input[["dea_results"]]
 
 # outputs
-volcano_plot_path <- snakemake@output[["dea_volcanos"]] #"/nobackup/lab_bock/projects/macroIC/results/AKsmall/dea_seurat/KOcall_NonTargeting_condition/plots/DEA_volcanos.png"
+volcano_plot_path <- snakemake@output[["dea_volcanos"]]
 
 # parameters
-assay <- snakemake@params[["assay"]] #"SCT" #"RNA"
-metadata <- snakemake@params[["metadata"]] #"condition"
-control <- snakemake@params[["control"]] #"untreated"
+assay <- snakemake@params[["assay"]]
+metadata <- snakemake@params[["metadata"]]
+control <- snakemake@params[["control"]]
 
 pCutoff <- snakemake@params[["pCutoff"]]
 FCcutoff <- snakemake@params[["FCcutoff"]]
@@ -32,7 +32,8 @@ width_panel <- n_col * width
 
 
 ### load DEA results
-dea_results <- read.csv(file=file.path(dea_result_path))
+# dea_results <- read.csv(file=file.path(dea_result_path))
+dea_results <- data.frame(fread(file.path(dea_result_path), header=TRUE))
 
 # convert group column to string for correct plotting
 dea_results$group <- as.character(dea_results$group)
@@ -40,9 +41,6 @@ dea_results$group <- as.character(dea_results$group)
 height_panel <- height * ceiling(length(unique(dea_results$group))/n_col)
 
 ### Visualize DEA results using Volcano plots
-
-# group <- "8h_cytokines"
-
 volcano_plots <- list()
 
 for (group in unique(dea_results$group)){
