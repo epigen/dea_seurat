@@ -1,49 +1,41 @@
 #### load libraries & utility function 
-library(Seurat)
+library("Seurat")
+library("data.table")
 
 # inputs
 object_path <- snakemake@input[[1]]
 
 # outputs
 dea_result_path <- snakemake@output[["dea_results"]]
+all_features_path <- snakemake@output[["all_features"]]
 
 # parameters
 assay <- snakemake@params[["assay"]]
 metadata <- snakemake@params[["metadata"]]
 control <- snakemake@params[["control"]]
 
-logfc_threshold <- snakemake@params[["logfc_threshold"]]
-test_use <- snakemake@params[["test_use"]]
-min_pct <- snakemake@params[["min_pct"]]
-
-return_thresh <- snakemake@params[["return_thresh"]]
-
-result_dir <- dirname(dea_result_path)
-
-# make directories if not exist
-if (!dir.exists(result_dir)){
-        dir.create(result_dir, recursive = TRUE)
-    }
+logfc_threshold <- snakemake@config[["logfc_threshold"]]
+test_use <- snakemake@config[["test_use"]]
+min_pct <- snakemake@config[["min_pct"]]
+return_thresh <- snakemake@config[["return_thresh"]]
 
 ### load data
 data <- readRDS(file = file.path(object_path))
 DefaultAssay(object = data) <- assay
 Idents(object = data) <- metadata
 
-
-### save list of all expressed features for downstream analysis (eg as background in enrichment analyses)
-features_path <- file.path(result_dir,"feature_lists")
-if (!dir.exists(features_path)){
-    dir.create(features_path, recursive = TRUE)
+# Prepare object to run differential expression on SCT assay with multiple models (just in case)
+if(assay=="SCT"){
+    data <- PrepSCTFindMarkers(data, assay = assay, verbose = TRUE)
 }
-all_features <- rownames(GetAssayData(object = data, assay = assay, slot = "data"))
-write(all_features, file.path(features_path, "ALL_features.txt"))
 
+### save list of all expressed features for downstream analysis (e.g., as background in enrichment analyses)
+all_features <- rownames(GetAssayData(object = data, assay = assay, slot = "data"))
+write(all_features, file.path(all_features_path))
 
 ### perform DEA
-
-# one vs all DEA to identify group specific markers compared to rest
 if (control=="ALL"){
+    # one vs all DEA to identify group specific markers compared to rest
     dea_results <- FindAllMarkers(object = data,
                                   assay = assay,
                                   features = NULL,
@@ -78,7 +70,7 @@ if (control=="ALL"){
     
     
 }else{
-    # grouo vs control DEA to identify changes compared to control
+    # group vs control DEA to identify changes compared to control
     dea_results <- data.frame()
 
     for (group in unlist(unique(data[[metadata]]))){

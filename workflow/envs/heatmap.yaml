@@ -7,3 +7,5 @@ dependencies:
   - r-ggplotify
   - r-patchwork
   - r-pheatmap
+  - r-data.table
+  - r-reshape2

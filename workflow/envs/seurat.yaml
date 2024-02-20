@@ -3,5 +3,6 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - r-seurat=4.0.6
+  - r-seurat=4.4.0
   - bioconductor-limma
+  - r-data.table
