@@ -48,7 +48,7 @@ rule aggregate:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)
     conda:
-        "../envs/visualization.yaml"
+        "../envs/ggplot.yaml"
     log:
         os.path.join("logs","rules","aggregate_{analysis}.log"),
     params:

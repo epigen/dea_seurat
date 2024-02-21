@@ -1,7 +1,5 @@
 #### load libraries & utility function 
 library("pheatmap")
-library("patchwork")
-library("ggplot2")
 library("ggplotify")
 library("reshape2")
 

@@ -1,6 +1,5 @@
 #### load libraries & utility function 
-library("EnhancedVolcano", quietly=TRUE)
-library("patchwork", quietly=TRUE)
+library("EnhancedVolcano")
 library("ggplot2")
 
 options(ragg.max_dim = 100000) # required for large volcano panels

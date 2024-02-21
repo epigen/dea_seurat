@@ -18,7 +18,7 @@ rule volcanos:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)
     conda:
-        "../envs/visualization.yaml"
+        "../envs/volcanos.yaml"
     log:
         os.path.join("logs","rules","volcanos_{analysis}_{feature_list}.log"),
     params:
@@ -47,7 +47,7 @@ rule heatmap:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)
     conda:
-        "../envs/visualization.yaml"
+        "../envs/heatmap.yaml"
     log:
         os.path.join("logs","rules","lfc_heatmap_{analysis}_{feature_list}.log"),
     params:

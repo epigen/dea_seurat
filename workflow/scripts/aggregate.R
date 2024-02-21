@@ -1,5 +1,4 @@
 #### load libraries & utility function 
-library("ggplot2")
 
 # source utility functions
 # source("workflow/scripts/utils.R")

@@ -1,4 +1,5 @@
 ### Utility Functions
+library("ggplot2")
 library("data.table")
 
 # extended ggsave

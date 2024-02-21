@@ -48,7 +48,7 @@ rule all:
                                  analysis = analyses,
                                  feature_list = feature_lists + ['FILTERED'],
                          ),
-        envs = expand(os.path.join(config["result_path"],'envs',module_name,'{env}.yaml'),env=['seurat','visualization']), # 'volcanos','ggplot','heatmap'
+        envs = expand(os.path.join(config["result_path"],'envs',module_name,'{env}.yaml'),env=['seurat','volcanos','ggplot','heatmap']),
         configs = os.path.join(config["result_path"],'configs',module_name,'{}_config.yaml'.format(config["project_name"])),
         annotations = os.path.join(config["result_path"],'configs',module_name,'{}_annot.csv'.format(config["project_name"])),
         feature_lists = expand(os.path.join(config["result_path"],'configs','dea_seurat','{feature_list}.txt'), feature_list = feature_lists),
