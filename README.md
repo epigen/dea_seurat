@@ -88,7 +88,7 @@ We selected a scRNA-seq data set consisting of 15 CRC samples from [Lee et al (2
 - features (genes): 22276
 - preprocessed using the compatible MR.PARETO module for [scRNA-seq data processing & visualization](https://github.com/epigen/scrnaseq_processing_seurat)
 - We performed a 1 vs rest analysis using the cell type annotation ("ALL").
-- total runtime on HPC w/ SLURM (32GB RAM; only DEA with 8 cores otherwise 1 core): <25 minutes for X jobs in total
+- total runtime on HPC w/ SLURM (32GB RAM; only DEA with 8 cores otherwise 1 core): <25 minutes for 17 jobs in total
 
 A comparison of the cell type marker expression split by cell types visualized as a dot plot with the DEA results as hierarchically clustered heatmap of the effect sizes.
 
@@ -96,7 +96,7 @@ A comparison of the cell type marker expression split by cell types visualized a
 :-------------------------:|:-------------------------:
 ![Cell Type Marker Dot plot](./test/data/Lee2020NatGenet/CellType_DotPlot.png)  |  ![Cell Type Marker Dot plot](./test/results/Lee2020NatGenet/dea_seurat/Lee2020NatGenet_cellTypes/plots/heatmap/CellTypeMarkers.png)
 
-We provide metadata, annotation and configuration files for this data set in ./test. The processed and prepared [Seurat RDS object](https://doi.org/10.5281/zenodo.XXXXX) has to be downloaded from Zenodo by following the instructions below.
+We provide metadata, annotation and configuration files for this data set in ./test. The processed and prepared [Seurat RDS object](https://doi.org/10.5281/zenodo.10688824) has to be downloaded from Zenodo by following the instructions below.
   ```console
   # download Zenodo records using zenodo_get
 
@@ -104,7 +104,7 @@ We provide metadata, annotation and configuration files for this data set in ./t
   conda install -c conda-forge zenodo_get=1.3.4
 
   # download the prepare Seurat RDS object
-  zenodo_get --record XXXXX --output-dir=test/data/Lee2020NatGenet/
+  zenodo_get --record 10688824 --output-dir=test/data/Lee2020NatGenet/
   ```
 
 # Links
