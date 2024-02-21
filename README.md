@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/483638364.svg)](https://zenodo.org/doi/10.5281/zenodo.10689139)
+
 # Single-cell RNA sequencing (scRNA-seq) Differential Expression Analysis & Visualization Snakemake Workflow
 A [Snakemake](https://snakemake.readthedocs.io/en/stable/) workflow for performing differential expression analyses (DEA) of processed (multimodal) scRNA-seq data powered by the R package [Seurat's](https://satijalab.org/seurat/index.html) functions [FindMarkers](https://satijalab.org/seurat/reference/findmarkers) and [FindAllMarkers](https://satijalab.org/seurat/reference/findallmarkers).
 
@@ -5,7 +7,7 @@ This workflow adheres to the module specifications of [MR.PARETO](https://github
 
 **If you use this workflow in a publication, don't forget to give credits to the authors by citing the URL of this (original) repository (and its DOI, see Zenodo badge above -> coming soon).**
 
-**If you use this workflow in a publication, please don't forget to give credits to the authors by citing it using this DOI [10.5281/zenodo.XXXX]().**
+**If you use this workflow in a publication, please don't forget to give credits to the authors by citing it using this DOI [10.5281/zenodo.10689139](https://zenodo.org/doi/10.5281/zenodo.10689139).**
 
 ![Workflow Rulegraph](./workflow/dags/rulegraph.svg)
 
@@ -50,7 +52,7 @@ The outlined analyses were performed using the R package Seurat (ver) [ref] unle
 To visually summarize results of the same analysis the filtered log2(fold change) values of features that were found to be at least in one comparison statistically significantly differentially expressed were visualized in a hierarchically clustered heatmap using pheatmap (ver) [ref]. 
 Volcano plots were generated for each analysis using EnhancedVolcano (ver) [ref] with adjusted p-value threshold of [X] and log2(fold change) threshold of [X] as visual cut-offs for the y- and x-axis, respectively.
 
-**The analysis and visualizations described here were performed using a publicly available Snakemake [ver] (ref) workflow [ref - cite this workflow here].**
+**The analysis and visualizations described here were performed using a publicly available Snakemake [ver] (ref) workflow [[10.5281/zenodo.10689139](https://zenodo.org/doi/10.5281/zenodo.10689139)].**
 
 # Features
 The workflow performs the following steps to produce the outlined results (`dea_seurat/{analysis}/`).
@@ -110,7 +112,7 @@ We provide metadata, annotation and configuration files for this data set in ./t
 # Links
 - [GitHub Repository](https://github.com/epigen/dea_seurat/)
 - [GitHub Page](https://epigen.github.io/dea_seurat/)
-- [Zenodo Repository (coming soon)]()
+- [Zenodo Repository](https://zenodo.org/doi/10.5281/zenodo.10689139)
 - [Snakemake Workflow Catalog Entry](https://snakemake.github.io/snakemake-workflow-catalog?usage=epigen/dea_seurat)
 
 # Resources
