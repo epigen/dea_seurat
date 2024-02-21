@@ -1,6 +1,13 @@
 #### load libraries & utility function 
 library("Seurat")
 library("data.table")
+library("future")
+
+# change the current plan to access all available cores for parallelization
+plan("multicore") # "multisession" does not work
+plan()
+# set global size for parallelization -> TODO: dynamic depending on data size, RAM and available threads. how?
+options(future.globals.maxSize = 1000 * 1024^2)
 
 # inputs
 object_path <- snakemake@input[[1]]

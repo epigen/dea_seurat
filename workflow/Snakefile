@@ -25,10 +25,10 @@ annot_dict = annot.to_dict('index')
 
 # load feature list paths and keep only non-empty
 feature_lists = []
-# feature_lists_dict = config["feature_lists"]
-# feature_lists_dict = {k: v for k, v in feature_lists_dict.items() if v!=""}
-# if feature_lists_dict is not None:
-#     feature_lists = feature_lists + list(feature_lists_dict.keys())
+feature_lists_dict = config["feature_lists"]
+feature_lists_dict = {k: v for k, v in feature_lists_dict.items() if v!=""}
+if feature_lists_dict is not None:
+    feature_lists = feature_lists + list(feature_lists_dict.keys())
 
 result_path = os.path.join(config["result_path"], module_name)
 
@@ -44,14 +44,14 @@ rule all:
         stats = expand(os.path.join(result_path,'{analysis}','stats.csv'),
                                analysis = analyses,
                               ),
-#         heatmaps = expand(os.path.join(result_path,'{analysis}','plots','heatmap','{feature_list}.png'),
-#                                  analysis = analyses,
-#                                  feature_list = feature_lists + ['FILTERED'],
-#                               ),
-        envs = expand(os.path.join(config["result_path"],'envs',module_name,'{env}.yaml'),env=['seurat','volcanos','ggplot','heatmap']),
+        heatmaps = expand(os.path.join(result_path,'{analysis}','plots','heatmap','{feature_list}.png'),
+                                 analysis = analyses,
+                                 feature_list = feature_lists + ['FILTERED'],
+                         ),
+        envs = expand(os.path.join(config["result_path"],'envs',module_name,'{env}.yaml'),env=['seurat','visualization']), # 'volcanos','ggplot','heatmap'
         configs = os.path.join(config["result_path"],'configs',module_name,'{}_config.yaml'.format(config["project_name"])),
         annotations = os.path.join(config["result_path"],'configs',module_name,'{}_annot.csv'.format(config["project_name"])),
-#         feature_lists = expand(os.path.join(config["result_path"],'configs','dea_seurat','{feature_list}.txt'), feature_list = feature_lists),
+        feature_lists = expand(os.path.join(config["result_path"],'configs','dea_seurat','{feature_list}.txt'), feature_list = feature_lists),
     resources:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)

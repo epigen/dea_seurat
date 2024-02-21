@@ -18,7 +18,7 @@ rule volcanos:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)
     conda:
-        "../envs/volcanos.yaml"
+        "../envs/visualization.yaml"
     log:
         os.path.join("logs","rules","volcanos_{analysis}_{feature_list}.log"),
     params:
@@ -33,22 +33,21 @@ rule volcanos:
 rule heatmap:
     input:
         results = os.path.join(result_path,'{analysis}','results.csv'),
-#         dea_filtered_lfc = os.path.join(result_path,'{analysis}','DEA_FILTERED_LFC.csv'),
     output:
         lfc_heatmap = report(os.path.join(result_path,'{analysis}','plots','heatmap','{feature_list}.png'),
-                              caption="../report/lfc_heatmap.rst",
+                              caption="../report/heatmap.rst",
                               category="{}_{}".format(config["project_name"], module_name),
                               subcategory="{analysis}",
                               labels={
                                       "name": "Heatmap",
-                                      "type": "effect sizes",
+                                      "type": "Effect sizes",
                                       "misc": "{feature_list}",
                                   }),
     resources:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)
     conda:
-        "../envs/heatmap.yaml"
+        "../envs/visualization.yaml"
     log:
         os.path.join("logs","rules","lfc_heatmap_{analysis}_{feature_list}.log"),
     params:

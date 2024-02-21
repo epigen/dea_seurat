@@ -4,5 +4,6 @@ channels:
   - defaults
 dependencies:
   - r-seurat=4.4.0
-  - bioconductor-limma
-  - r-data.table
+  - bioconductor-limma=3.58.1
+  - r-data.table=1.14.10
+  - r-future=1.33.1

@@ -1,0 +1,1 @@
+Clustered heatmap visualizing average log2 fold changes of {{snakemake.wildcards["feature_list"]}} features resulting from DEA {{snakemake.wildcards["analysis"]}} using assay {{snakemake.params["assay"]}} to compare groups in {{snakemake.params["metadata"]}} versus {{snakemake.params["control"]}}.

@@ -1,0 +1,11 @@
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - bioconductor-enhancedvolcano=1.12.0
+  - r-ggplot2=3.4.2
+  - r-ggplotify=0.1.0
+  - r-pheatmap=1.0.12
+  - r-data.table=1.14.8
+  - r-reshape2=1.4.4

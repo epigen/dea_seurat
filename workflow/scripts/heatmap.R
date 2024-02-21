@@ -11,7 +11,6 @@ snakemake@source("./utils.R")
 
 # inputs
 dea_result_path <- snakemake@input[["results"]]
-# dea_filtered_lfc_path <- snakemake@input[["dea_filtered_lfc"]]
 
 # outputs
 lfc_heatmap_path <- snakemake@output[["lfc_heatmap"]]
@@ -28,13 +27,8 @@ min_pct <- snakemake@config[["filters"]][["min_pct"]]
 feature_list_name <- snakemake@wildcards[["feature_list"]]
 
 # plot specifications
-width <- 0.25
+width <- 0.15
 height <- 0.15
-
-
-### load LFC DEA results
-# dea_lfc <- read.csv(file=file.path(dea_filtered_lfc_path), row.names = 1)
-# dea_lfc <- data.frame(fread(file.path(dea_filtered_lfc_path), header=TRUE), row.names=1)
 
 # load dea results
 dea_results <- data.frame(fread(file.path(dea_result_path), header=TRUE))
@@ -47,6 +41,8 @@ if (feature_list_name=="FILTERED"){
 } else {
     feature_list_path <- snakemake@config[["feature_lists"]][[feature_list_name]]
     feature_list <- scan(file.path(feature_list_path), character())
+    # ensure features are in the results
+    feature_list <- unique(intersect(feature_list, dea_results$feature))
 }
 
 # make LFC dataframe
@@ -69,6 +65,7 @@ lfc_df[is.na(lfc_df)] <- 0
 # indicate significance
 adjp_df[adjp_df<=adj_pval] <- "*"
 adjp_df[adjp_df>adj_pval] <- ""
+adjp_df[is.na(adjp_df)] <- ""
 
 ### visualize LFC of DEA results as heatmap
 height_panel <-  if (nrow(lfc_df)<100) (height * nrow(lfc_df) + 2) else 5
@@ -77,7 +74,7 @@ width_panel <- width * ncol(lfc_df) + 2
 # make heatmap
 lfc_heatmap <- as.ggplot(pheatmap(lfc_df,
                                   display_numbers = if(nrow(lfc_df)<100) adjp_df else FALSE,
-                                  main=paste0("Average log2FC of ", feature_list_name," features"),
+                                  main=paste0("Avg.log2FC of ", feature_list_name," features\n", metadata,' vs ', control),
                                   cluster_cols = ifelse(ncol(lfc_df)>1, TRUE, FALSE),
                                   cluster_rows = ifelse(nrow(lfc_df)>1, TRUE, FALSE),
                                   show_rownames = ifelse(nrow(lfc_df)<100, TRUE, FALSE),
@@ -96,48 +93,9 @@ lfc_heatmap <- as.ggplot(pheatmap(lfc_df,
                                   silent = TRUE
                                  )
                         )
-
+# save heatmap
 ggsave_new(filename = feature_list_name, 
            results_path=dirname(lfc_heatmap_path), 
            plot=lfc_heatmap, 
            width=width_panel, 
            height=height_panel)
-
-
-# ########### OLD CODE
-
-# # set NA values to 0 (NA because below LFC threshold during testing or filtering)
-# dea_lfc[is.na(dea_lfc)] <- 0
-
-# ### visualize LFC of DEA results as heatmap
-# width_panel <- width * ncol(dea_lfc) + 3
-
-# annot <- data.frame(group=gsub("group_","",colnames(dea_lfc)))
-# rownames(annot) <- colnames(dea_lfc)
-
-# # make heatmap
-# lfc_heatmap <- as.ggplot(pheatmap(dea_lfc,
-#                                   show_rownames=F,
-#                                   show_colnames=T,
-#                                   cluster_cols = ncol(dea_lfc) > 1,
-#                                   fontsize = 5,
-#                                   angle_col = 45,
-#                                   treeheight_row = 25,
-#                                   treeheight_col = 10,
-# #                                   annotation_col = annot,
-#                                   breaks=seq(-max(abs(dea_lfc)), max(abs(dea_lfc)), length.out=200),
-#                                   color=colorRampPalette(c("blue", "white", "red"))(200),
-#                                   annotation_names_col = F,
-#                                   silent = TRUE
-#                                  )
-#                         )
-
-# # save plot
-# # options(repr.plot.width=width_panel, repr.plot.height=height)
-# # print(lfc_heatmap)
-
-# ggsave_new(filename = feature_list_name, 
-#            results_path=dirname(lfc_heatmap_path), 
-#            plot=lfc_heatmap, 
-#            width=width_panel, 
-#            height=height)

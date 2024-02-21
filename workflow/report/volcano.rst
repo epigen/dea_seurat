@@ -1,1 +1,1 @@
-Volcano plot panel visualizing DEA results of analysis {{snakemake.wildcards["analysis"]}} using assay {{snakemake.params["assay"]}} to compare groups in {{snakemake.params["metadata"]}} versus {{snakemake.params["control"]}}.
+Volcano plot panel visualizing DEA results of analysis {{snakemake.wildcards["analysis"]}} using assay {{snakemake.params["assay"]}} to compare groups in {{snakemake.params["metadata"]}} versus {{snakemake.params["control"]}} highlighting {{snakemake.wildcards["feature_list"]}} features.

@@ -1,9 +1,7 @@
 
-# alwayse use absolute paths
-
 ##### RESOURCES #####
 mem: '32000'
-threads: 2
+threads: 1 # only DEA rule is multicore and gets 8*threads
 partition: 'shortq'
 
 ##### GENERAL #####
@@ -42,3 +40,11 @@ filters:
 volcano:
     pCutoff: 0.05
     FCcutoff: 0.1
+
+# path(s) to feature lists as plain text files (.txt) with one gene per line.
+# used to highlight features in volcano plots and generate LFC clustered heatmaps.
+# only use camelCase for the feature_list names like in the examples below.
+# if not used: put an empty entry e.g., noGenes: ""
+feature_lists:
+    favoriteGenes: ""
+    interestingGenes: ""

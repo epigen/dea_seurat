@@ -143,9 +143,10 @@ dea_filtered_results_p <- ggplot(plot_stats_df, aes(x=groups, y=n_features, fill
                                              geom_bar(stat="identity", position="identity") +
                                              xlab(metadata) +
                                              ylab("number of differential features") +
-                                             scale_fill_manual(values=list("up"="red", "down"="blue"), drop=FALSE) +
+                                             scale_fill_manual(values=list("down"="blue", "up"="red"), drop=FALSE) +
+                                             scale_y_continuous(labels = function(y) sapply(y, function(y) ifelse(y < 0, paste0(sub("-", "", as.character(y))), y))) +
                                              custom_theme +
-                                             theme(legend.position = "none",
+                                             theme(#legend.position = "none",
                                                    axis.text.x = element_text(angle = 45, vjust = 1, hjust=1, size = 6)
                                                   )
                                              
