@@ -1,0 +1,2 @@
+﻿name,data,assay,metadata,control
+Lee2020NatGenet_cellTypes,test/data/Lee2020NatGenet/object.rds,SCT,cell_type,ALL
