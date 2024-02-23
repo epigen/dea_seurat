@@ -47,7 +47,7 @@ for (pval_type in c("p_val_adj", "p_val")){
     for (group in unique(dea_results$group)){
         
         toptable <- dea_results[dea_results$group==group,]
-        lab <- toptable$feature
+        
         x <- "avg_log2FC"
         selectLab <- NULL
         colCustom <- NULL
@@ -77,7 +77,7 @@ for (pval_type in c("p_val_adj", "p_val")){
         }
 
         volcano_plot <- EnhancedVolcano(toptable = toptable,
-                        lab = lab,
+                        lab = toptable$feature,
                         x = x,
                         y = pval_type,
                         selectLab = selectLab,

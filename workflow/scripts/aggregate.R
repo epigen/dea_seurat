@@ -44,15 +44,6 @@ if (score_formula!=""){
 # annotate differential direction (up or down)
 dea_results$direction <- as.character(lapply(dea_results$avg_log2FC, function(x) if(x>0){"up"}else{"down"}))
 
-# ### aggregate & save DEA statistics by stat. sign.
-# tmp_dea_results <- dea_results[dea_results$p_val_adj <= adj_pval, ]
-# dea_stats <- table(tmp_dea_results$group, tmp_dea_results$direction)
-# dea_stats_df <- as.data.frame.matrix(dea_stats)
-# dea_stats_df$total <- rowSums(dea_stats_df)
-
-# # write.csv(dea_stats_df, file=file.path(dea_stats_path), row.names=TRUE)
-# fwrite(as.data.frame(dea_stats_df), file=file.path(dea_stats_path), row.names=TRUE)
-
 ### aggregate & save FILTERED DEA statistics
 dea_filtered_results <- dea_results[(dea_results$p_val_adj<=adj_pval) & 
                                   (abs(dea_results$avg_log2FC)>=lfc) & 
@@ -65,21 +56,6 @@ dea_filtered_stats_df$total <- rowSums(dea_filtered_stats_df)
 # write.csv(dea_filtered_stats_df, file=file.path(dea_stats_path), row.names=TRUE)
 fwrite(as.data.frame(dea_filtered_stats_df), file=file.path(dea_stats_path), row.names=TRUE)
 
-### aggregate & save LFC matrix from filtered DEA results -> NOT USED anymore as it duplicates results unnecessarily
-# groups <- paste0("group_",unique(dea_filtered_results$group))
-# features <- unique(dea_filtered_results$feature)
-                                             
-# lfc_df <- data.frame(matrix(nrow=length(features), ncol=length(groups), dimnames=list(features, groups)))
-
-# for (group in unique(dea_filtered_results$group)){
-#     tmp_dea_results <- dea_results[dea_results$group==group, ] #old: dea_filtered_results[dea_filtered_results$group==group, ]
-#     rownames(tmp_dea_results) <- tmp_dea_results$feature
-#     lfc_df[features, paste0("group_",group)] <- tmp_dea_results[features, 'avg_log2FC']
-# }
-
-# # write.csv(lfc_df, file=file.path(dea_filtered_lfc_path), row.names=TRUE)
-# fwrite(as.data.frame(lfc_df), file=file.path(dea_filtered_lfc_path), row.names=TRUE)
-
 ### save differential feature lists from filtered DEA results for downstream analysis (e.g., enrichment analysis)         
 for (group in unique(dea_filtered_results$group)){
     for (direction in unique(dea_filtered_results$direction)){
@@ -87,55 +63,17 @@ for (group in unique(dea_filtered_results$group)){
         tmp_features <- dea_filtered_results[(dea_filtered_results$group==group) & (dea_filtered_results$direction==direction),"feature"]
         write(tmp_features, file.path(dirname(dea_result_path),"feature_lists",paste0(group,"_",direction,"_features.txt")))
     }
-}
-                                             
-# ### visualize & save ALL DEA statistics -> NOT USED anymore as it's confusing/redundant
-# width_panel <- length(groups) * width + 1
-                                             
-# # convert group column to string for correct plotting
-# dea_results$group <- as.character(dea_results$group)
-# tmp_dea_results <- dea_results[dea_results$p_val_adj<=adj_pval, ]
-
-# dea_results_p <- ggplot(tmp_dea_results, aes(x=group, fill=direction)) + 
-#                                              geom_bar() + 
-#                                              xlab(metadata) +
-#                                              ylab("number of differential features") +
-#                                              scale_y_continuous(limits = c(0, NA), expand = c(0, 0)) +
-#                                              scale_fill_manual(values=list(up="red", down="blue"), drop=FALSE) +
-#                                              custom_theme +
-#                                              theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust=1, size = 6)) # rotates the x-Axis
-                                             
-                                             
-# # save plot
-# # options(repr.plot.width=width_panel, repr.plot.height=height)
-# # print(dea_results_p)
-# ggsave_new(filename = "stats", 
-#            results_path=dirname(dea_stats_plot_path), 
-#            plot=dea_results_p, 
-#            width=width_panel, 
-#            height=height)      
+}     
                                              
 ### visualize & save FILTERED DEA statistics
-width_panel <- length(groups) * width + 1
+width_panel <- length(groups) * width + 2
 
-# convert group column to string for correct plotting
-# dea_filtered_results$group <- as.character(dea_filtered_results$group)
-                                             
-# dea_filtered_results_p <- ggplot(dea_filtered_results, aes(x=group, fill=direction)) + 
-#                                              geom_bar() + 
-#                                              xlab(metadata) +
-#                                              ylab("number of differential features") +
-#                                              scale_y_continuous(limits = c(0, NA), expand = c(0, 0)) +
-#                                              scale_fill_manual(values=list(up="red", down="blue"), drop=FALSE) +
-#                                              custom_theme +
-#                                              theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust=1, size = 6)) # rotates the x-Axis
-
-# fromat stats df for plotting: remove "total" column & transform from wide to long
-dea_filtered_stats_df <- dea_filtered_stats_df[,-3]
+# format stats df for plotting: remove "total" column & transform from wide to long
+dea_filtered_stats_df$total <- NULL
 dea_filtered_stats_df[,"down"] <- -1 * dea_filtered_stats_df[,"down"]
 plot_stats_df <- stack(dea_filtered_stats_df)
 colnames(plot_stats_df) <- c("n_features","direction")
-plot_stats_df$groups <- c(rownames(dea_filtered_stats_df), rownames(dea_filtered_stats_df))
+plot_stats_df$groups <- rep(rownames(dea_filtered_stats_df), ncol(dea_filtered_stats_df))
 
 # plot
 dea_filtered_results_p <- ggplot(plot_stats_df, aes(x=groups, y=n_features, fill=direction)) + 
@@ -148,11 +86,8 @@ dea_filtered_results_p <- ggplot(plot_stats_df, aes(x=groups, y=n_features, fill
                                              theme(#legend.position = "none",
                                                    axis.text.x = element_text(angle = 45, vjust = 1, hjust=1, size = 6)
                                                   )
-                                             
-                                             
+
 # save plot
-# options(repr.plot.width=width_panel, repr.plot.height=height)
-# print(dea_filtered_results_p)
 ggsave_new(filename = "stats", 
            results_path=dirname(dea_stats_plot_path), 
            plot=dea_filtered_results_p, 

@@ -130,5 +130,4 @@ if (control=="ALL"){
 }
 
 ### save results
-# write.csv(dea_results, file=file.path(dea_result_path), row.names=FALSE)
 fwrite(as.data.frame(dea_results), file=file.path(dea_result_path), row.names=FALSE)

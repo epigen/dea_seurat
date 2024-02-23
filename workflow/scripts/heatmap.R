@@ -43,13 +43,24 @@ if (feature_list_name=="FILTERED"){
     feature_list <- unique(intersect(feature_list, dea_results$feature))
 }
 
+# if no features in the results, end early with empty plot
+if(length(feature_list)==0){
+    ggsave_new(filename = feature_list_name, 
+           results_path=dirname(lfc_heatmap_path), 
+           plot = ggplot() + annotate("text", x = 0.5, y = 0.5, label = "Features not found in DEA results.") + theme_void(), 
+           width=4, 
+           height=1)
+    
+    quit(save = "no", status = 0)
+}
+
 # make LFC dataframe
-lfc_df <- dcast(dea_results, feature ~ group, value.var = 'avg_log2FC')
+lfc_df <- reshape2::dcast(dea_results, feature ~ group, value.var = 'avg_log2FC')
 rownames(lfc_df) <- lfc_df$feature
 lfc_df$feature <- NULL
 
 # make adjusted p-value dataframe
-adjp_df <- dcast(dea_results, feature ~ group, value.var = 'p_val_adj')
+adjp_df <- reshape2::dcast(dea_results, feature ~ group, value.var = 'p_val_adj')
 rownames(adjp_df) <- adjp_df$feature
 adjp_df$feature <- NULL
 
