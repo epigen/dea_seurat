@@ -17,6 +17,7 @@ test_use: "wilcox"
 min_pct: 0.1
 
 # additional parameter for https://satijalab.org/seurat/reference/findallmarkers
+# Only return markers that have a p-value < return.thresh, or a power > return.thresh (if the test is ROC)
 return_thresh: 1
 
 ##### AGGREGATION #####

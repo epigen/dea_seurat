@@ -4,7 +4,7 @@ rule env_export:
         report(os.path.join(config["result_path"],'envs','dea_seurat','{env}.yaml'),
                       caption="../report/software.rst", 
                       category="Software", 
-                      subcategory="{}_dea_seurat".format(config["project_name"])
+                      subcategory="{}_{}".format(config["project_name"], module_name)
                      ),
     conda:
         "../envs/{env}.yaml"
@@ -26,7 +26,7 @@ rule config_export:
         configs = report(os.path.join(config["result_path"],'configs','dea_seurat','{}_config.yaml'.format(config["project_name"])), 
                          caption="../report/configs.rst", 
                          category="Configuration", 
-                         subcategory="{}_dea_seurat".format(config["project_name"])
+                         subcategory="{}_{}".format(config["project_name"], module_name)
                         )
     resources:
         mem_mb=config.get("mem", "16000"),
@@ -37,7 +37,7 @@ rule config_export:
         partition=config.get("partition"),
     run:
         with open(output["configs"], 'w') as outfile:
-            yaml.dump(config, outfile)
+            yaml.dump(config, outfile, sort_keys=False, width=1000, indent=2)
         
 # export used annotation file for documentation and reproducibility         
 rule annot_export:
@@ -47,7 +47,7 @@ rule annot_export:
         annot = report(os.path.join(config["result_path"],'configs','dea_seurat','{}_annot.csv'.format(config["project_name"])), 
                          caption="../report/configs.rst", 
                          category="Configuration", 
-                         subcategory="{}_dea_seurat".format(config["project_name"])
+                         subcategory="{}_{}".format(config["project_name"], module_name)
                         )
     resources:
         mem_mb=1000, #config.get("mem_small", "16000"),
