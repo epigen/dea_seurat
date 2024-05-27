@@ -77,10 +77,10 @@ for (pval_type in c("p_val_adj", "p_val")){
         }
 
         volcano_plot <- EnhancedVolcano(toptable = toptable,
-                        lab = toptable$feature,
+                        lab = if (feature_list_name=="ALL") NA else toptable$feature,
                         x = x,
                         y = pval_type,
-                        selectLab = selectLab,
+                        selectLab = if (feature_list_name=="ALL") NULL else selectLab,
                         xlim = c(min(toptable[[x]], na.rm = TRUE) - 1, max(toptable[[x]], na.rm = TRUE) + 1),
                         ylim = c(0, max(-log10(toptable[[pval_type]]), na.rm = TRUE) + 5),
                         xlab = bquote("average" ~log[2] ~ "fold change"),
