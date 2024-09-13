@@ -14,7 +14,6 @@ rule dea:
     log:
         os.path.join("logs","rules","dea_{analysis}.log"),
     params:
-        partition=config.get("partition"),
         assay = lambda w: annot_dict["{}".format(w.analysis)]["assay"],
         metadata = lambda w: annot_dict["{}".format(w.analysis)]["metadata"],
         control = lambda w: annot_dict["{}".format(w.analysis)]["control"],
@@ -52,7 +51,6 @@ rule aggregate:
     log:
         os.path.join("logs","rules","aggregate_{analysis}.log"),
     params:
-        partition=config.get("partition"),
         assay = lambda w: annot_dict["{}".format(w.analysis)]["assay"],
         metadata = lambda w: annot_dict["{}".format(w.analysis)]["metadata"],
         control = lambda w: annot_dict["{}".format(w.analysis)]["control"],

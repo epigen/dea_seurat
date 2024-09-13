@@ -22,7 +22,6 @@ rule volcanos:
     log:
         os.path.join("logs","rules","volcanos_{analysis}_{feature_list}.log"),
     params:
-        partition=config.get("partition"),
         assay = lambda w: annot_dict["{}".format(w.analysis)]["assay"],
         metadata = lambda w: annot_dict["{}".format(w.analysis)]["metadata"],
         control = lambda w: annot_dict["{}".format(w.analysis)]["control"],
@@ -51,7 +50,6 @@ rule heatmap:
     log:
         os.path.join("logs","rules","lfc_heatmap_{analysis}_{feature_list}.log"),
     params:
-        partition=config.get("partition"),
         assay = lambda w: annot_dict["{}".format(w.analysis)]["assay"],
         metadata = lambda w: annot_dict["{}".format(w.analysis)]["metadata"],
         control = lambda w: annot_dict["{}".format(w.analysis)]["control"],

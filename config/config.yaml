@@ -2,7 +2,6 @@
 ##### RESOURCES #####
 mem: '32000'
 threads: 1 # only DEA rule is multicore and gets 8*threads
-partition: 'shortq'
 
 ##### GENERAL #####
 annotation: /path/to/MyData_dea_seurat_annotation.csv

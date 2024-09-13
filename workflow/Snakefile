@@ -1,4 +1,7 @@
 
+##### global workflow dependencies #####
+conda: "envs/global.yaml"
+
 ##### libraries #####
 import os
 import sys
@@ -6,7 +9,8 @@ import pandas as pd
 import yaml
 from snakemake.utils import min_version
 
-min_version("7.15.2")
+##### set minimum snakemake version #####
+min_version("8.20.1")
 
 ##### module name #####
 module_name = "dea_seurat"
@@ -48,17 +52,15 @@ rule all:
                                  analysis = analyses,
                                  feature_list = feature_lists + ['FILTERED'],
                          ),
-        envs = expand(os.path.join(config["result_path"],'envs',module_name,'{env}.yaml'),env=['seurat','volcanos','ggplot','heatmap']),
-        configs = os.path.join(config["result_path"],'configs',module_name,'{}_config.yaml'.format(config["project_name"])),
-        annotations = os.path.join(config["result_path"],'configs',module_name,'{}_annot.csv'.format(config["project_name"])),
-        feature_lists = expand(os.path.join(config["result_path"],'configs',module_name,'{feature_list}.txt'), feature_list = feature_lists),
+        envs = expand(os.path.join(result_path,'envs','{env}.yaml'),env=['seurat','volcanos','ggplot','heatmap']),
+        configs = os.path.join(result_path,'configs','{}_config.yaml'.format(config["project_name"])),
+        annotations = os.path.join(result_path,'configs','{}_annot.csv'.format(config["project_name"])),
+        feature_lists = expand(os.path.join(result_path,'configs','{feature_list}.txt'), feature_list = feature_lists),
     resources:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)
     log:
         os.path.join("logs","rules","all.log"),
-    params:
-        partition=config.get("partition"),
 
         
 ##### load rules #####
