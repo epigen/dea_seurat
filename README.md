@@ -1,4 +1,4 @@
-[![MR.PARETO](https://img.shields.io/badge/MR.PARETO-red)](https://github.com/epigen/mr.pareto/)
+[![MrBiomics](https://img.shields.io/badge/MrBiomics-red)](https://github.com/epigen/MrBiomics/)
 [![DOI](https://zenodo.org/badge/483638364.svg)](https://zenodo.org/doi/10.5281/zenodo.10689139)
 [![](https://tokei.rs/b1/github/epigen/dea_seurat?category=code)]() 
 [![](https://tokei.rs/b1/github/epigen/dea_seurat?category=files)]()
@@ -10,7 +10,7 @@
 A [Snakemake 8](https://snakemake.readthedocs.io/en/stable/) workflow for performing differential expression analyses (DEA) of processed (multimodal) scRNA-seq data powered by the R package [Seurat's](https://satijalab.org/seurat/index.html) functions [FindMarkers](https://satijalab.org/seurat/reference/findmarkers) and [FindAllMarkers](https://satijalab.org/seurat/reference/findallmarkers).
 
 > [!NOTE]  
-> This workflow adheres to the module specifications of [MR.PARETO](https://github.com/epigen/mr.pareto), an effort to augment research by modularizing (biomedical) data science. For more details, instructions, and modules check out the project's repository.
+> This workflow adheres to the module specifications of [MrBiomics](https://github.com/epigen/MrBiomics), an effort to augment research by modularizing (biomedical) data science. For more details, instructions, and modules check out the project's repository.
 >
 > ⭐️ **Star and share modules you find valuable** 📤 - help others discover them, and guide our future work!
 
@@ -83,7 +83,7 @@ We selected a scRNA-seq data set consisting of 15 CRC samples from [Lee et al (2
 - samples/patients: 15
 - cells: 21657
 - features (genes): 22276
-- preprocessed using the compatible MR.PARETO module for [scRNA-seq data processing & visualization](https://github.com/epigen/scrnaseq_processing_seurat)
+- preprocessed using the compatible MrBiomics module for [scRNA-seq data processing & visualization](https://github.com/epigen/scrnaseq_processing_seurat)
 - We performed a 1 vs rest analysis using the cell type annotation ("ALL").
 - total runtime on HPC w/ SLURM (32GB RAM; only DEA with 8 cores otherwise 1 core): <25 minutes for 17 jobs in total
 
@@ -111,7 +111,7 @@ We provide metadata, annotation and configuration files for this data set in ./t
 - [Snakemake Workflow Catalog Entry](https://snakemake.github.io/snakemake-workflow-catalog?usage=epigen/dea_seurat)
 
 # 📚 Resources
-- Recommended compatible [MR.PARETO](https://github.com/epigen/mr.pareto) modules for:
+- Recommended compatible [MrBiomics](https://github.com/epigen/MrBiomics) modules for:
   - upstream analysis
     - [scRNA-seq Data Processing & Visualization](https://github.com/epigen/scrnaseq_processing_seurat) for processing (multimodal) single-cell transcriptome data.
   - downstream analyses
