@@ -51,9 +51,34 @@ rule aggregate:
     log:
         os.path.join("logs","rules","aggregate_{analysis}.log"),
     params:
+        group = "ALL",
         assay = lambda w: annot_dict["{}".format(w.analysis)]["assay"],
         metadata = lambda w: annot_dict["{}".format(w.analysis)]["metadata"],
         control = lambda w: annot_dict["{}".format(w.analysis)]["control"],
     script:
         "../scripts/aggregate.R"
 
+# generate feature lists per group
+# not part of target rule all and only used when the outputs are required by a subsequent module e.g., enrichment_analysis
+rule feature_lists:
+    input:
+        dea_results = os.path.join(result_path,'{analysis}','results.csv'),
+        dea_stats = os.path.join(result_path,'{analysis}','stats.csv'), # this ensures rule order (after rule aggregate) to avoid file writing clashes
+    output:
+        features_up = os.path.join(result_path,'{analysis}','feature_lists',"{group}_up_features.txt"),
+        features_down = os.path.join(result_path,'{analysis}','feature_lists',"{group}_down_features.txt"),
+        features_scores = os.path.join(result_path,'{analysis}','feature_lists',"{group}_featureScores.csv"),
+    resources:
+        mem_mb=config.get("mem", "16000"),
+    threads: config.get("threads", 1)
+    conda:
+        "../envs/ggplot.yaml"
+    log:
+        os.path.join("logs","rules","feature_lists_{analysis}_{group}.log"),
+    params:
+        group = lambda w: "{}".format(w.group),
+        assay = lambda w: annot_dict["{}".format(w.analysis)]["assay"],
+        metadata = lambda w: annot_dict["{}".format(w.analysis)]["metadata"],
+        control = lambda w: annot_dict["{}".format(w.analysis)]["control"],
+    script:
+        "../scripts/aggregate.R"

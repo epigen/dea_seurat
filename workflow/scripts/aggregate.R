@@ -12,6 +12,7 @@ dea_stats_path <- snakemake@output[["dea_stats"]]
 dea_stats_plot_path <- snakemake@output[["dea_stats_plot"]]
 
 # parameters
+group_flag <- snakemake@params[["group"]]
 assay <- snakemake@params[["assay"]]
 metadata <- snakemake@params[["metadata"]]
 control <- snakemake@params[["control"]]
@@ -27,7 +28,13 @@ height <- 5
 
 ### load DEA results
 dea_results <- data.frame(fread(file.path(dea_result_path), header=TRUE))
-groups <- unique(dea_results$group)
+
+# set groups depending on rule used
+if (group_flag=="ALL"){
+    groups <- unique(dea_results$group)
+} else{
+    groups <- group_flag
+}
 
 # determine and save feature scores for each gene and group for downstream analysis e.g., preranked GSEA
 if (score_formula!=""){
@@ -56,7 +63,10 @@ if (!all(c("up", "down") %in% colnames(dea_filtered_stats_df))) {
 }
 
 dea_filtered_stats_df$total <- rowSums(dea_filtered_stats_df)
-fwrite(as.data.frame(dea_filtered_stats_df), file=file.path(dea_stats_path), row.names=TRUE)
+
+if (group_flag=="ALL"){
+    fwrite(as.data.frame(dea_filtered_stats_df), file=file.path(dea_stats_path), row.names=TRUE)
+}
 
 ### save differential feature lists from filtered DEA results for downstream analysis (e.g., enrichment analysis)
 for (group in groups){
@@ -68,6 +78,11 @@ for (group in groups){
         tmp_features <- unique(tmp_features)
         write(tmp_features, file.path(dirname(dea_result_path),"feature_lists",paste0(group,"_",direction,"_features.txt")))
     }
+}
+
+# quit early if rule feature_lists called aggregate.R
+if (group_flag!="ALL"){
+    quit(save = "no", status = 0)
 }
 
 if (nrow(dea_filtered_stats) != 0) { # If there are DEA results after filtering
