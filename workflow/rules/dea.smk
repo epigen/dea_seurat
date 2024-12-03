@@ -67,7 +67,7 @@ rule feature_lists:
     output:
         features_up = os.path.join(result_path,'{analysis}','feature_lists',"{group}_up_features.txt"),
         features_down = os.path.join(result_path,'{analysis}','feature_lists',"{group}_down_features.txt"),
-        features_scores = os.path.join(result_path,'{analysis}','feature_lists',"{group}_featureScores.csv"),
+        features_scores = os.path.join(result_path,'{analysis}','feature_lists',"{group}_featureScores.csv") if config["score_formula"]!="" else [],
     resources:
         mem_mb=config.get("mem", "16000"),
     threads: config.get("threads", 1)

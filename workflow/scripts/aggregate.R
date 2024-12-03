@@ -102,7 +102,7 @@ if (nrow(dea_filtered_stats) != 0) { # If there are DEA results after filtering
                                                  geom_bar(stat="identity", position="identity") +
                                                  xlab(metadata) +
                                                  ylab("number of differential features") +
-                                                 scale_fill_manual(values=list("down"="blue", "up"="red"), drop=FALSE) +
+                                                 scale_fill_manual(values=list("up"="red", "down"="blue"), drop=FALSE) +
                                                  scale_y_continuous(labels = function(y) sapply(y, function(y) ifelse(y < 0, paste0(sub("-", "", as.character(y))), y))) +
                                                  geom_text(aes(label=ifelse(n_features == 0, '', abs(n_features)), vjust=ifelse(n_features < 0, 1.5, -0.5), hjust=0.5), size=2) +
                                                  custom_theme +
