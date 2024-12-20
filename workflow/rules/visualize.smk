@@ -25,6 +25,7 @@ rule volcanos:
         assay = lambda w: annot_dict["{}".format(w.analysis)]["assay"],
         metadata = lambda w: annot_dict["{}".format(w.analysis)]["metadata"],
         control = lambda w: annot_dict["{}".format(w.analysis)]["control"],
+        utils_path = workflow.source_path("../scripts/utils.R"),
     script:
         "../scripts/volcanos.R"
         

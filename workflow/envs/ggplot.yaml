@@ -1,6 +1,6 @@
 channels:
   - conda-forge
-  - defaults
+  - nodefaults
 dependencies:
   - r-ggplot2=3.4.2
   - r-data.table=1.14.8
