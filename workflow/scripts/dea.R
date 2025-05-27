@@ -21,10 +21,10 @@ assay <- snakemake@params[["assay"]]
 metadata <- snakemake@params[["metadata"]]
 control <- snakemake@params[["control"]]
 
-logfc_threshold <- snakemake@config[["logfc_threshold"]]
-test_use <- snakemake@config[["test_use"]]
-min_pct <- snakemake@config[["min_pct"]]
-return_thresh <- snakemake@config[["return_thresh"]]
+logfc_threshold <- snakemake@params[["logfc_threshold"]]
+test_use <- snakemake@params[["test_use"]]
+min_pct <- snakemake@params[["min_pct"]]
+return_thresh <- snakemake@params[["return_thresh"]]
 
 ### load data
 data <- readRDS(file = file.path(object_path))

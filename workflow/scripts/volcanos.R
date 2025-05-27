@@ -11,6 +11,7 @@ source(snakemake@params[["utils_path"]])
 
 # inputs
 dea_result_path <- snakemake@input[["results"]]
+feature_list_path <- snakemake@input[["feature_list"]]
 
 # outputs
 volcano_plot_path <- snakemake@output[["volcanos"]]
@@ -20,8 +21,8 @@ assay <- snakemake@params[["assay"]]
 metadata <- snakemake@params[["metadata"]]
 control <- snakemake@params[["control"]]
 
-pCutoff <- snakemake@config[["volcano"]][["pCutoff"]]
-FCcutoff <- snakemake@config[["volcano"]][["FCcutoff"]]
+pCutoff <- snakemake@params[["pCutoff"]]
+FCcutoff <- snakemake@params[["FCcutoff"]]
 
 feature_list_name <- snakemake@wildcards[["feature_list"]]
 
@@ -34,7 +35,7 @@ dea_results <- data.frame(fread(file.path(dea_result_path), header=TRUE))
 
 # load feature list if not ALL
 if (feature_list_name!="ALL"){
-    feature_list_path <- snakemake@config[["feature_lists"]][[feature_list_name]]
+    # feature_list_path <- snakemake@config[["feature_lists"]][[feature_list_name]]
     feature_list <- scan(file.path(feature_list_path), character())
     # ensure features are in the results
     feature_list <- unique(intersect(feature_list, dea_results$feature))

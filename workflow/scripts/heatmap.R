@@ -10,6 +10,7 @@ source(snakemake@params[["utils_path"]])
 
 # inputs
 dea_result_path <- snakemake@input[["results"]]
+feature_list_path <- snakemake@input[["feature_list"]]
 
 # outputs
 lfc_heatmap_path <- snakemake@output[["lfc_heatmap"]]
@@ -19,9 +20,9 @@ assay <- snakemake@params[["assay"]]
 metadata <- snakemake@params[["metadata"]]
 control <- snakemake@params[["control"]]
 
-adj_pval <- snakemake@config[["filters"]][["adj_pval"]]
-lfc <- snakemake@config[["filters"]][["lfc"]]
-min_pct <- snakemake@config[["filters"]][["min_pct"]]
+adj_pval <- snakemake@params[["adj_pval"]]
+lfc <- snakemake@params[["lfc"]]
+min_pct <- snakemake@params[["min_pct"]]
 
 feature_list_name <- snakemake@wildcards[["feature_list"]]
 
@@ -38,7 +39,7 @@ if (feature_list_name=="FILTERED"){
                                   (abs(dea_results$avg_log2FC)>=lfc) & 
                                   (apply(dea_results[,c("pct.1","pct.2")], 1, max) >= min_pct), 'feature'])
 } else {
-    feature_list_path <- snakemake@config[["feature_lists"]][[feature_list_name]]
+    # feature_list_path <- snakemake@config[["feature_lists"]][[feature_list_name]]
     feature_list <- scan(file.path(feature_list_path), character())
     # ensure features are in the results
     feature_list <- unique(intersect(feature_list, dea_results$feature))

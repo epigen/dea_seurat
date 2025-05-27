@@ -3,6 +3,7 @@
 rule volcanos:
     input:
         results = os.path.join(result_path,'{analysis}','results.csv'),
+        feature_list = get_feature_list_path,
     output:
         volcanos = report(directory(os.path.join(result_path,'{analysis}','plots','volcano','{feature_list}')),
                               patterns=["{group}.png"],
@@ -25,6 +26,8 @@ rule volcanos:
         assay = lambda w: annot_dict["{}".format(w.analysis)]["assay"],
         metadata = lambda w: annot_dict["{}".format(w.analysis)]["metadata"],
         control = lambda w: annot_dict["{}".format(w.analysis)]["control"],
+        pCutoff = config["volcano"]["pCutoff"],
+        FCcutoff = config["volcano"]["FCcutoff"],
         utils_path = workflow.source_path("../scripts/utils.R"),
     script:
         "../scripts/volcanos.R"
@@ -33,6 +36,7 @@ rule volcanos:
 rule heatmap:
     input:
         results = os.path.join(result_path,'{analysis}','results.csv'),
+        feature_list = get_feature_list_path,
     output:
         lfc_heatmap = report(os.path.join(result_path,'{analysis}','plots','heatmap','{feature_list}.png'),
                               caption="../report/heatmap.rst",
@@ -54,5 +58,8 @@ rule heatmap:
         assay = lambda w: annot_dict["{}".format(w.analysis)]["assay"],
         metadata = lambda w: annot_dict["{}".format(w.analysis)]["metadata"],
         control = lambda w: annot_dict["{}".format(w.analysis)]["control"],
+        adj_pval = config["filters"]["adj_pval"],
+        lfc = config["filters"]["lfc"],
+        min_pct = config["filters"]["min_pct"],
     script:
         "../scripts/heatmap.R"

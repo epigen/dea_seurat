@@ -18,10 +18,10 @@ assay <- snakemake@params[["assay"]]
 metadata <- snakemake@params[["metadata"]]
 control <- snakemake@params[["control"]]
 
-adj_pval <- snakemake@config[["filters"]][["adj_pval"]]
-lfc <- snakemake@config[["filters"]][["lfc"]]
-min_pct <- snakemake@config[["filters"]][["min_pct"]]
-score_formula <- snakemake@config[["score_formula"]]
+adj_pval <- snakemake@params[["adj_pval"]]
+lfc <- snakemake@params[["lfc"]]
+min_pct <- snakemake@params[["min_pct"]]
+score_formula <- snakemake@params[["score_formula"]]
 
 # plot specifications
 width <- 0.25
