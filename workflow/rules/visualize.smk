@@ -61,5 +61,6 @@ rule heatmap:
         adj_pval = config["filters"]["adj_pval"],
         lfc = config["filters"]["lfc"],
         min_pct = config["filters"]["min_pct"],
+        utils_path = workflow.source_path("../scripts/utils.R"),
     script:
         "../scripts/heatmap.R"

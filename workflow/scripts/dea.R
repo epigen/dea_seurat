@@ -6,8 +6,10 @@ library("future")
 # change the current plan to access all available cores for parallelization
 plan("multicore") # "multisession" does not work
 plan()
-# set global size for parallelization -> TODO: dynamic depending on data size, RAM and available threads. how?
-options(future.globals.maxSize = 1000 * 1024^2)
+
+# Set the future.globals.maxSize option to  90% of allocated memory, converting MB to bytes.
+mem_mb <- as.numeric(snakemake@resources[["mem_mb"]])
+options(future.globals.maxSize = (mem_mb * 0.9) * 1024^2)
 
 # inputs
 object_path <- snakemake@input[[1]]

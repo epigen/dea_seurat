@@ -17,10 +17,10 @@ rule dea:
         assay = lambda w: annot_dict["{}".format(w.analysis)]["assay"],
         metadata = lambda w: annot_dict["{}".format(w.analysis)]["metadata"],
         control = lambda w: annot_dict["{}".format(w.analysis)]["control"],
-        logfc_threshold = config[["logfc_threshold"]],
-        test_use = config[["test_use"]],
-        min_pct = config[["min_pct"]],
-        return_thresh = config[["return_thresh"]],
+        logfc_threshold = config["logfc_threshold"],
+        test_use = config["test_use"],
+        min_pct = config["min_pct"],
+        return_thresh = config["return_thresh"],
     script:
         "../scripts/dea.R"
 
@@ -59,10 +59,10 @@ rule aggregate:
         assay = lambda w: annot_dict["{}".format(w.analysis)]["assay"],
         metadata = lambda w: annot_dict["{}".format(w.analysis)]["metadata"],
         control = lambda w: annot_dict["{}".format(w.analysis)]["control"],
-        adj_pval = config[["filters"]][["adj_pval"]],
-        lfc = config[["filters"]][["lfc"]],
-        min_pct = config[["filters"]][["min_pct"]],
-        score_formula = config[["score_formula"]],
+        adj_pval = config["filters"]["adj_pval"],
+        lfc = config["filters"]["lfc"],
+        min_pct = config["filters"]["min_pct"],
+        score_formula = config["score_formula"],
         utils_path = workflow.source_path("../scripts/utils.R"),
     script:
         "../scripts/aggregate.R"
@@ -89,10 +89,10 @@ rule feature_lists:
         assay = lambda w: annot_dict["{}".format(w.analysis)]["assay"],
         metadata = lambda w: annot_dict["{}".format(w.analysis)]["metadata"],
         control = lambda w: annot_dict["{}".format(w.analysis)]["control"],
-        adj_pval = config[["filters"]][["adj_pval"]],
-        lfc = config[["filters"]][["lfc"]],
-        min_pct = config[["filters"]][["min_pct"]],
-        score_formula = config[["score_formula"]],
+        adj_pval = config["filters"]["adj_pval"],
+        lfc = config["filters"]["lfc"],
+        min_pct = config["filters"]["min_pct"],
+        score_formula = config["score_formula"],
         utils_path = workflow.source_path("../scripts/utils.R"),
     script:
         "../scripts/aggregate.R"

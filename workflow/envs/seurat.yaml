@@ -4,6 +4,7 @@ channels:
   - nodefaults
 dependencies:
   - r-seurat=4.4.0
+  - r-seuratobject=4.1.4
   - bioconductor-limma=3.58.1
   - r-data.table=1.14.10
-  - r-future=1.33.1
+  - r-future=1.67.0
